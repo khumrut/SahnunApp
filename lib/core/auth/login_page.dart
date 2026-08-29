@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../modules/dashboard/dashboard_page.dart';
+import '../../routing/landing_router.dart';
+import 'auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -11,12 +12,68 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final usernameController = TextEditingController();
+
   final passwordController = TextEditingController();
 
-  void login() {
-    Navigator.of(
-      context,
-    ).pushReplacement(MaterialPageRoute(builder: (_) => const DashboardPage()));
+  bool loading = false;
+  bool hidePassword = true;
+  String? errorMessage;
+
+  Future<void> login() async {
+    final username = usernameController.text.trim();
+
+    final password = passwordController.text;
+
+    if (username.isEmpty || password.isEmpty) {
+      setState(() {
+        errorMessage = 'กรุณากรอกชื่อผู้ใช้และรหัสผ่าน';
+      });
+
+      return;
+    }
+
+    setState(() {
+      loading = true;
+      errorMessage = null;
+    });
+
+    try {
+      final result = await AuthService.login(
+        username: username,
+        password: password,
+      );
+
+      if (!mounted) {
+        return;
+      }
+
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => LandingRouter.build(result.bootstrap),
+        ),
+      );
+    } catch (e) {
+      if (!mounted) {
+        return;
+      }
+
+      setState(() {
+        errorMessage = e.toString().replaceFirst('Exception: ', '');
+      });
+    } finally {
+      if (mounted) {
+        setState(() {
+          loading = false;
+        });
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    usernameController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -66,13 +123,15 @@ class _LoginPageState extends State<LoginPage> {
 
                 const Text(
                   'One App. Every Sahnun Service.',
-                  style: TextStyle(color: Color(0xFF9A9A9A), fontSize: 15),
+                  style: TextStyle(color: Color(0xFF9A9A9A)),
                 ),
 
                 const SizedBox(height: 42),
 
                 TextField(
                   controller: usernameController,
+                  enabled: !loading,
+                  textInputAction: TextInputAction.next,
                   decoration: const InputDecoration(
                     labelText: 'Username',
                     prefixIcon: Icon(Icons.person_outline),
@@ -84,13 +143,37 @@ class _LoginPageState extends State<LoginPage> {
 
                 TextField(
                   controller: passwordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
+                  enabled: !loading,
+                  obscureText: hidePassword,
+                  onSubmitted: (_) => login(),
+                  decoration: InputDecoration(
                     labelText: 'Password',
-                    prefixIcon: Icon(Icons.lock_outline),
-                    border: OutlineInputBorder(),
+                    prefixIcon: const Icon(Icons.lock_outline),
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          hidePassword = !hidePassword;
+                        });
+                      },
+                      icon: Icon(
+                        hidePassword
+                            ? Icons.visibility_outlined
+                            : Icons.visibility_off_outlined,
+                      ),
+                    ),
+                    border: const OutlineInputBorder(),
                   ),
                 ),
+
+                if (errorMessage != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: Text(
+                      errorMessage!,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: Colors.redAccent),
+                    ),
+                  ),
 
                 const SizedBox(height: 24),
 
@@ -98,14 +181,20 @@ class _LoginPageState extends State<LoginPage> {
                   width: double.infinity,
                   height: 54,
                   child: FilledButton(
-                    onPressed: login,
-                    child: const Text(
-                      'เข้าสู่ระบบ',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    onPressed: loading ? null : login,
+                    child: loading
+                        ? const SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : const Text(
+                            'เข้าสู่ระบบ',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                   ),
                 ),
 
