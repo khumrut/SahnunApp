@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../api/api_client.dart';
@@ -26,7 +27,7 @@ class AuthService {
       body: {
         'username': username,
         'password': password,
-        'device_name': Platform.localHostname,
+        'device_name': _deviceName(),
         'platform': _platformName(),
       },
     );
@@ -101,7 +102,23 @@ class AuthService {
     return _storage.delete(key: _tokenKey);
   }
 
+  static String _deviceName() {
+    if (kIsWeb) {
+      return 'web-browser';
+    }
+
+    try {
+      return Platform.localHostname;
+    } catch (_) {
+      return 'unknown-device';
+    }
+  }
+
   static String _platformName() {
+    if (kIsWeb) {
+      return 'web';
+    }
+
     if (Platform.isWindows) {
       return 'windows';
     }

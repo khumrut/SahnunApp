@@ -4,6 +4,7 @@ import '../../core/models/app_bootstrap.dart';
 import 'link_student_page.dart';
 import 'parent_service.dart';
 import 'parent_student.dart';
+import 'attendance_page.dart';
 
 class ParentHomePage extends StatefulWidget {
   final AppBootstrap bootstrap;
@@ -164,6 +165,17 @@ class _ParentHomePageState extends State<ParentHomePage> {
           return _StudentSection(
             student: student,
             onMenuTap: (title) {
+              if (title == 'เวลาเข้า-ออก') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => AttendancePage(student: student),
+                  ),
+                );
+
+                return;
+              }
+
               _comingSoon(title, student);
             },
           );
