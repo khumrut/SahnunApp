@@ -2,16 +2,13 @@ import 'package:flutter/material.dart';
 
 import '../core/models/app_bootstrap.dart';
 import '../modules/dashboard/dashboard_page.dart';
+import '../modules/parent/parent_home_page.dart';
 
 class LandingRouter {
   static Widget build(AppBootstrap bootstrap) {
     switch (bootstrap.defaultLanding) {
       case 'parent':
-        return ModulePlaceholderPage(
-          title: 'Parent',
-          icon: Icons.family_restroom,
-          bootstrap: bootstrap,
-        );
+        return ParentHomePage(bootstrap: bootstrap);
 
       case 'pos':
         return ModulePlaceholderPage(
@@ -67,10 +64,7 @@ class ModulePlaceholderPage extends StatelessWidget {
               style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
-            Text(
-              'ผู้ใช้: '
-              '${bootstrap.displayName}',
-            ),
+            Text('ผู้ใช้: ${bootstrap.displayName}'),
           ],
         ),
       ),
