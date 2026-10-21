@@ -57,9 +57,7 @@ class _ParentHomePageState extends State<ParentHomePage> {
   Future<void> _openStudent(ParentStudent student) async {
     final changed = await Navigator.push<bool>(
       context,
-      MaterialPageRoute(
-        builder: (_) => _StudentDetailPage(student: student),
-      ),
+      MaterialPageRoute(builder: (_) => _StudentDetailPage(student: student)),
     );
     if (!mounted) return;
     if (changed == true) await _loadStudents();
@@ -119,9 +117,8 @@ class _ParentHomePageState extends State<ParentHomePage> {
         children: [
           Text(
             'นักเรียนที่เชื่อมโยง',
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+            style: Theme.of(context).textTheme.titleLarge
+                ?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 4),
           Text('เลือกนักเรียนเพื่อดูรายละเอียด (${_students.length} คน)'),
@@ -253,7 +250,9 @@ class _StudentDetailPageState extends State<_StudentDetailPage> {
       return;
     }
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('$title • ${widget.student.name}\nกำลังพัฒนาระบบส่วนนี้')),
+      SnackBar(
+        content: Text('$title • ${widget.student.name}\nกำลังพัฒนาระบบส่วนนี้'),
+      ),
     );
   }
 
@@ -312,7 +311,9 @@ class _StudentDetailPageState extends State<_StudentDetailPage> {
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(16),
-                        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                        color: Theme.of(context)
+                            .colorScheme
+                            .surfaceContainerHighest,
                       ),
                       child: Column(
                         children: [
@@ -335,9 +336,8 @@ class _StudentDetailPageState extends State<_StudentDetailPage> {
             const SizedBox(height: 18),
             Text(
               'บริการสำหรับนักเรียน',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(context).textTheme.titleMedium
+                  ?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
             LayoutBuilder(
@@ -350,12 +350,42 @@ class _StudentDetailPageState extends State<_StudentDetailPage> {
                   mainAxisSpacing: 12,
                   childAspectRatio: constraints.maxWidth >= 700 ? 2.3 : 1.55,
                   children: [
-                    _ParentMenu(icon: Icons.access_time, title: 'เวลาเข้า-ออก', subtitle: 'ตรวจสอบเวลาเรียน', onTap: () => _openMenu('เวลาเข้า-ออก')),
-                    _ParentMenu(icon: Icons.receipt_long, title: 'รายการใช้จ่าย', subtitle: 'ดูประวัติการใช้เงิน', onTap: () => _openMenu('รายการใช้จ่าย')),
-                    _ParentMenu(icon: Icons.account_balance_wallet, title: 'เติมเงิน', subtitle: 'เติมเงินให้นักเรียน', onTap: () => _openMenu('เติมเงิน')),
-                    _ParentMenu(icon: Icons.school, title: 'ค่าเล่าเรียน', subtitle: 'ตรวจสอบยอดชำระ', onTap: () => _openMenu('ค่าเล่าเรียน')),
-                    _ParentMenu(icon: Icons.badge, title: 'ข้อมูลนักเรียน', subtitle: 'ข้อมูลส่วนตัวและห้องเรียน', onTap: () => _openMenu('ข้อมูลนักเรียน')),
-                    _ParentMenu(icon: Icons.notifications, title: 'แจ้งเตือน', subtitle: 'ข่าวสารและข้อความ', onTap: () => _openMenu('แจ้งเตือน')),
+                    _ParentMenu(
+                      icon: Icons.access_time,
+                      title: 'เวลาเข้า-ออก',
+                      subtitle: 'ตรวจสอบเวลาเรียน',
+                      onTap: () => _openMenu('เวลาเข้า-ออก'),
+                    ),
+                    _ParentMenu(
+                      icon: Icons.receipt_long,
+                      title: 'รายการใช้จ่าย',
+                      subtitle: 'ดูประวัติการใช้เงิน',
+                      onTap: () => _openMenu('รายการใช้จ่าย'),
+                    ),
+                    _ParentMenu(
+                      icon: Icons.account_balance_wallet,
+                      title: 'เติมเงิน',
+                      subtitle: 'เติมเงินให้นักเรียน',
+                      onTap: () => _openMenu('เติมเงิน'),
+                    ),
+                    _ParentMenu(
+                      icon: Icons.school,
+                      title: 'ค่าเล่าเรียน',
+                      subtitle: 'ตรวจสอบยอดชำระ',
+                      onTap: () => _openMenu('ค่าเล่าเรียน'),
+                    ),
+                    _ParentMenu(
+                      icon: Icons.badge,
+                      title: 'ข้อมูลนักเรียน',
+                      subtitle: 'ข้อมูลส่วนตัวและห้องเรียน',
+                      onTap: () => _openMenu('ข้อมูลนักเรียน'),
+                    ),
+                    _ParentMenu(
+                      icon: Icons.notifications,
+                      title: 'แจ้งเตือน',
+                      subtitle: 'ข่าวสารและข้อความ',
+                      onTap: () => _openMenu('แจ้งเตือน'),
+                    ),
                   ],
                 );
               },
@@ -364,7 +394,9 @@ class _StudentDetailPageState extends State<_StudentDetailPage> {
             OutlinedButton.icon(
               onPressed: _unlinking ? null : _unlinkStudent,
               icon: const Icon(Icons.person_remove_outlined),
-              label: Text(_unlinking ? 'กำลังดำเนินการ...' : 'ยกเลิกการเชื่อมโยงนักเรียน'),
+              label: Text(
+                _unlinking ? 'กำลังดำเนินการ...' : 'ยกเลิกการเชื่อมโยงนักเรียน',
+              ),
             ),
           ],
         ),
@@ -418,7 +450,10 @@ class _ParentMenu extends StatelessWidget {
                       title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                      ),
                     ),
                     const SizedBox(height: 3),
                     Text(
