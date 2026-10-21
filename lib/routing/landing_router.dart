@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../core/models/app_bootstrap.dart';
 import '../modules/dashboard/dashboard_page.dart';
 import '../modules/parent/parent_home_page.dart';
+import '../modules/restaurant/restaurant_home_page.dart';
 
 class LandingRouter {
   static Widget build(AppBootstrap bootstrap) {
@@ -18,11 +19,7 @@ class LandingRouter {
         );
 
       case 'restaurant':
-        return ModulePlaceholderPage(
-          title: 'Restaurant',
-          icon: Icons.restaurant,
-          bootstrap: bootstrap,
-        );
+        return RestaurantHomePage(bootstrap: bootstrap);
 
       case 'delivery':
         return ModulePlaceholderPage(

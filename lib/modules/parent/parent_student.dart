@@ -29,10 +29,6 @@ class ParentStudent {
   factory ParentStudent.fromJson(Map<String, dynamic> json) {
     final student = Map<String, dynamic>.from(json['student'] ?? {});
 
-    print('STUDENT PHOTO DEBUG: '
-    'student_id=${student['userid']} '
-    'photo_url=${student['photo_url']}');
-
     return ParentStudent(
       linkId: int.tryParse('${json['link_id'] ?? 0}') ?? 0,
       organizationId: int.tryParse('${json['organization_id'] ?? 0}') ?? 0,

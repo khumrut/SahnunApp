@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/auth/auth_service.dart';
 import '../../core/models/app_bootstrap.dart';
 import '../../core/auth/login_page.dart';
+import '../restaurant/restaurant_home_page.dart';
 
 class DashboardPage extends StatelessWidget {
   final AppBootstrap bootstrap;
@@ -82,7 +83,16 @@ class DashboardPage extends StatelessWidget {
                 return Card(
                   child: InkWell(
                     borderRadius: BorderRadius.circular(16),
-                    onTap: () {},
+                    onTap: () {
+                      if (code == 'restaurant') {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                RestaurantHomePage(bootstrap: bootstrap),
+                          ),
+                        );
+                      }
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(20),
                       child: Column(
